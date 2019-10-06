@@ -1,9 +1,21 @@
 import React from 'react';
-import {Button, View, Picker} from 'react-native';
+import {Button, View, Picker, Text} from 'react-native';
 import {Formik} from 'formik';
 import StyledInput from './StyledInput';
+import {string, object, number, array} from 'yup';
+import ErrorMessages from './ErrorMessages';
 
 export default function BracketForm() {
+  let bracketSchema = object().shape({
+    bracketName: string().required('Please enter a name for your Bracket'),
+    numCompetitors: number().required('Please Select a number of competitors'),
+    competitors: array().of(
+      object().shape({
+        name: string().required('Please enter a name for each competitor'),
+      }),
+    ),
+  });
+
   const adjustCompetitorsNum = (newNum, competitors) => {
     return newNum < competitors.length
       ? competitors.filter((value, index) => {
@@ -18,8 +30,9 @@ export default function BracketForm() {
 
   return (
     <Formik
+      validationSchema={bracketSchema}
       initialValues={{
-        name: '',
+        bracketName: '',
         numCompetitors: initialNumCompetitors,
         competitors: Array.from({length: initialNumCompetitors}, () => ({
           name: '',
@@ -37,8 +50,8 @@ export default function BracketForm() {
               }}>
               <View style={{flex: 0.7}}>
                 <StyledInput
-                  onChangeText={props.handleChange('name')}
-                  onBlur={props.handleBlur('name')}
+                  onChangeText={props.handleChange('bracketName')}
+                  onBlur={props.handleBlur('bracketName')}
                   value={props.values.name}
                   placeholder="Bracket Name"
                 />
@@ -77,6 +90,9 @@ export default function BracketForm() {
             </View>
           </View>
           <Button onPress={props.handleSubmit} title="Submit" />
+          <View>
+            <ErrorMessages errors={props.errors} touched={props.touched} />
+          </View>
         </View>
       )}
     </Formik>
