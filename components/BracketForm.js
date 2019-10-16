@@ -4,6 +4,7 @@ import {Formik} from 'formik';
 import StyledInput from './StyledInput';
 import {string, object, number, array} from 'yup';
 import ErrorMessages from './ErrorMessages';
+import axios from 'axios';
 
 export default function BracketForm() {
   let bracketSchema = object().shape({
@@ -26,6 +27,22 @@ export default function BracketForm() {
         );
   };
 
+  const submitForm = (values, actions) => {
+    axios
+      .create({
+        baseURL: 'http://10.0.2.2:3000/',
+      })
+      .post('/brackets/', {
+        ...values,
+      })
+      .then(() => {
+        actions.setSubmitting(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   const initialNumCompetitors = 4;
 
   return (
@@ -38,7 +55,9 @@ export default function BracketForm() {
           name: '',
         })),
       }}
-      onSubmit={values => console.log(values)}>
+      onSubmit={(values, actions) => {
+        submitForm(values, actions);
+      }}>
       {props => (
         <View style={{width: '80%'}}>
           <View style={{paddingBottom: 30}}>
@@ -89,7 +108,7 @@ export default function BracketForm() {
               })}
             </View>
           </View>
-          <Button onPress={props.handleSubmit} title="Submit" />
+          <Button onPress={props.submitForm} title="Submit" />
           <View>
             <ErrorMessages errors={props.errors} touched={props.touched} />
           </View>
