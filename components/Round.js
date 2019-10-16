@@ -8,11 +8,12 @@ export default function Round(props) {
       <FlatList
         data={props.matchups}
         renderItem={item => {
-        return(
-        <View style={{paddingTop: 20, paddingBottom: 20}}>
-          <Matchup {...item.item} />
-        </View>
-  )}}
+          return  (
+            <View style={{paddingTop: 20, paddingBottom: 20}}>
+              <Matchup {...item.item} />
+            </View>
+          );
+        ;}}
       />
     </View>
   );

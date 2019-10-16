@@ -7,6 +7,7 @@ import BracketForm from './components/BracketForm';
 import Bracket from './components/Bracket';
 import StyledTextInput from './components/StyledInput';
 import SearchScreen from './screens/SearchScreen';
+import PreviewScreen from './screens/PreviewScreen';
 
 class HomeScreen extends React.Component {
   componentDidMount() {}
@@ -15,7 +16,7 @@ class HomeScreen extends React.Component {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Home!</Text>
-        <Bracket />
+        {/* <Bracket /> */}
       </View>
     );
   }
@@ -38,6 +39,7 @@ class CreateScreen extends React.Component {
 
 const SearchScreenStack = createStackNavigator({
   SearchScreen: {screen: SearchScreen},
+  PreviewScreen: {screen: PreviewScreen},
 });
 
 const TabNavigator = createBottomTabNavigator({

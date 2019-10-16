@@ -3,8 +3,9 @@ import {Text, View, Button, FlatList} from 'react-native';
 import axios from 'axios';
 import BracketSearchResult from '../components/BracketSearchResult';
 
-export default function SearchScreen() {
+export default function SearchScreen(props) {
   const [brackets, setBrackets] = useState([]);
+  const {navigation} = props;
 
   const getBrackets = () => {
     axios
@@ -36,7 +37,7 @@ export default function SearchScreen() {
         renderItem={item => {
           return (
             <View style={{alignItems: 'center', paddingBottom: 20}}>
-              <BracketSearchResult {...item.item} />
+              <BracketSearchResult {...item.item} navigation={navigation} />
             </View>
           );
         }}
