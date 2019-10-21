@@ -3,7 +3,7 @@ import {FlatList, View, Text} from 'react-native';
 import Round from './Round';
 
 export default function Bracket(props) {
-  const { bracket } = props
+  const {bracket, competitorClickCallback} = props;;
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -11,10 +11,14 @@ export default function Bracket(props) {
         horizontal={true}
         data={bracket.rounds}
         renderItem={item => {
-          return( 
-          <View style={{padding: 40}}> 
-            <Round {...item.item} />
-            </View>);
+          return  (
+            <View style={{padding: 40}}>
+              <Round
+                {...item.item}
+                competitorClickCallback={competitorClickCallback}
+              />
+            </View>
+          );
         }}
       />
     </View>

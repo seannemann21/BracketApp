@@ -2,12 +2,12 @@ import React from 'react';
 import {Button, View, Picker, Text, TouchableHighlight} from 'react-native';
 
 export default function BracketSearchResult(props) {
-  const {name, creator, created_at, id, navigation} = props;
+  const {name, creator, created_at, id, navigation, nextScreen} = props;
   const creatorUsername =
     creator && creator.username ? creator.username : 'unknown';
 
   const navigateToPreview = () => {
-    navigation.navigate('PreviewScreen', {id: id});
+    navigation.navigate(nextScreen, {id: id});
   };
 
   return (

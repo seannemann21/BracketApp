@@ -8,6 +8,8 @@ import Bracket from './components/Bracket';
 import StyledTextInput from './components/StyledInput';
 import SearchScreen from './screens/SearchScreen';
 import PreviewScreen from './screens/PreviewScreen';
+import JoinedScreen from './screens/JoinedScreen';
+import BracketScreen from './screens/BracketScreen';
 
 class HomeScreen extends React.Component {
   componentDidMount() {}
@@ -37,13 +39,18 @@ class CreateScreen extends React.Component {
   }
 }
 
+const JoinedScreenStack = createStackNavigator({
+  JoinedScreen: {screen: JoinedScreen},
+  BracketScreen: {screen: BracketScreen},
+});
+
 const SearchScreenStack = createStackNavigator({
   SearchScreen: {screen: SearchScreen},
   PreviewScreen: {screen: PreviewScreen},
 });
 
 const TabNavigator = createBottomTabNavigator({
-  Home: HomeScreen,
+  Joined: JoinedScreenStack,
   Search: SearchScreenStack,
   Create: CreateScreen,
 });

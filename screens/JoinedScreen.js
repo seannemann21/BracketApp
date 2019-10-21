@@ -6,12 +6,13 @@ import BracketList from '../components/BracketList';
 export default function SearchScreen(props) {
   const [brackets, setBrackets] = useState([]);
   const {navigation} = props;
-  const nextScreen = 'PreviewScreen';
+  const userId = 1;
+  const nextScreen = 'BracketScreen';
 
   const getBrackets = () => {
     axios
       .create({
-        baseURL: 'http://10.0.2.2:3000/',
+        baseURL: `http://10.0.2.2:3000/users/${userId}`,
       })
       .get('/brackets/')
       .then(resp => {
@@ -33,11 +34,7 @@ export default function SearchScreen(props) {
         flex: 1,
         paddingTop: '20%',
       }}>
-      <BracketList
-        brackets={brackets}
-        navigation={navigation}
-        nextScreen={nextScreen}
-      />
+      <BracketList brackets={brackets} navigation={navigation} nextScreen={nextScreen} />
     </View>
   );
 }
