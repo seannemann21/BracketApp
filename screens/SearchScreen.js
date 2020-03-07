@@ -1,31 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {Text, View, Button, FlatList} from 'react-native';
-import axios from 'axios';
 import BracketList from '../components/BracketList';
+import useAPI from '../hooks/useAPI';
 
 export default function SearchScreen(props) {
   const [brackets, setBrackets] = useState([]);
-  const {navigation} = props;
+  const navigation = props.navigation;
   const nextScreen = 'PreviewScreen';
-
-  const getBrackets = () => {
-    axios
-      .create({
-        baseURL: 'http://10.0.2.2:3000/',
-      })
-      .get('/brackets/')
-      .then(resp => {
-        console.log(resp.data);
-        setBrackets(resp.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  const {response, isLoading} = useAPI('/brackets/');
 
   useEffect(() => {
-    getBrackets();
-  }, []);
+    if (response) {
+      setBrackets(response.data);
+    }
+  }, [response]);
 
   return (
     <View
@@ -33,11 +21,15 @@ export default function SearchScreen(props) {
         flex: 1,
         paddingTop: '20%',
       }}>
-      <BracketList
-        brackets={brackets}
-        navigation={navigation}
-        nextScreen={nextScreen}
-      />
+      {isLoading ? (
+        <Button title="Loading..." />
+      ) : (
+        <BracketList
+          brackets={brackets}
+          navigation={navigation}
+          nextScreen={nextScreen}
+        />
+      )}
     </View>
   );
 }

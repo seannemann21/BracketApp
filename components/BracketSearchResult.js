@@ -18,8 +18,8 @@ export default function BracketSearchResult(props) {
       }}>
       <TouchableHighlight onPress={navigateToPreview}>
         <>
-        <Text>{`${name}: ${creatorUsername}`}</Text>
-        <Text>{`${created_at}`}</Text>
+          <Text>{`${name}: ${creatorUsername}`}</Text>
+          <Text>{`${created_at}`}</Text>
         </>
       </TouchableHighlight>
     </View>

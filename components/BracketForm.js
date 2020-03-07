@@ -6,49 +6,52 @@ import {string, object, number, array} from 'yup';
 import ErrorMessages from './ErrorMessages';
 import axios from 'axios';
 
-export default function BracketForm() {
-  let bracketSchema = object().shape({
-    bracketName: string().required('Please enter a name for your Bracket'),
-    numCompetitors: number().required('Please Select a number of competitors'),
-    competitors: array().of(
-      object().shape({
-        name: string().required('Please enter a name for each competitor'),
-      }),
-    ),
-  });
+const bracketSchema = object().shape({
+  authorEmail: string(),
+  bracketName: string().required('Please enter a name for your Bracket'),
+  numCompetitors: number().required('Please Select a number of competitors'),
+  competitors: array().of(
+    object().shape({
+      name: string().required('Please enter a name for each competitor'),
+    }),
+  ),
+});
 
-  const adjustCompetitorsNum = (newNum, competitors) => {
-    return newNum < competitors.length
-      ? competitors.filter((value, index) => {
-          return index < newNum;
-        })
-      : competitors.concat(
-          Array.from({length: newNum - competitors.length}, () => ({name: ''})),
-        );
-  };
+const submitForm = (values, actions, authToken) => {
+  axios
+    .create({
+      baseURL: 'http://10.0.2.2:3000/',
+      headers: {Authorization: `Bearer ${authToken}`},
+    })
+    .post('/brackets/', {
+      ...values,
+    })
+    .then(() => {
+      actions.setSubmitting(false);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+};
 
-  const submitForm = (values, actions) => {
-    axios
-      .create({
-        baseURL: 'http://10.0.2.2:3000/',
+const adjustCompetitorsNum = (newNum, competitors) => {
+  return newNum < competitors.length
+    ? competitors.filter((value, index) => {
+        return index < newNum;
       })
-      .post('/brackets/', {
-        ...values,
-      })
-      .then(() => {
-        actions.setSubmitting(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+    : competitors.concat(
+        Array.from({length: newNum - competitors.length}, () => ({name: ''})),
+      );
+};
 
+export default function BracketForm({authorEmail, authToken}) {
   const initialNumCompetitors = 4;
 
   return (
     <Formik
       validationSchema={bracketSchema}
       initialValues={{
+        authorEmail: authorEmail,
         bracketName: '',
         numCompetitors: initialNumCompetitors,
         competitors: Array.from({length: initialNumCompetitors}, () => ({
@@ -56,7 +59,7 @@ export default function BracketForm() {
         })),
       }}
       onSubmit={(values, actions) => {
-        submitForm(values, actions);
+        submitForm(values, actions, authToken);
       }}>
       {props => (
         <View style={{width: '80%'}}>
